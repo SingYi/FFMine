@@ -17,7 +17,7 @@
     // Setup your scene here
     
     // Get label node from scene and store it for use later
-    _label = (SKLabelNode *)[self childNodeWithName:@"//helloLabel"];
+    _label = (SKLabelNode *)[self childNodeWithName:@"There is no spoon"];
     
     _label.alpha = 0.0;
     [_label runAction:[SKAction fadeInWithDuration:2.0]];
@@ -30,8 +30,8 @@
     
     [_spinnyNode runAction:[SKAction repeatActionForever:[SKAction rotateByAngle:M_PI duration:1]]];
     [_spinnyNode runAction:[SKAction sequence:@[
-                                                [SKAction waitForDuration:0.5],
-                                                [SKAction fadeOutWithDuration:0.5],
+                                                [SKAction waitForDuration:3],
+                                                [SKAction fadeOutWithDuration:3],
                                                 [SKAction removeFromParent],
                                                 ]]];
 }
@@ -65,7 +65,9 @@
     for (UITouch *t in touches) {[self touchDownAtPoint:[t locationInNode:self]];}
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
-    for (UITouch *t in touches) {[self touchMovedToPoint:[t locationInNode:self]];}
+    for (UITouch *t in touches) {
+        [self touchMovedToPoint:[t locationInNode:self]];
+    }
 }
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     for (UITouch *t in touches) {[self touchUpAtPoint:[t locationInNode:self]];}

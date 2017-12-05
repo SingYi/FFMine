@@ -23,7 +23,9 @@
     [_label runAction:[SKAction fadeInWithDuration:2.0]];
     
     CGFloat w = (self.size.width + self.size.height) * 0.05;
-    
+
+//    SKSpriteNode *test =
+
     // Create shape node to use during mouse interaction
     _spinnyNode = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(w, w) cornerRadius:w * 0.3];
     _spinnyNode.lineWidth = 2.5;

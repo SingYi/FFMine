@@ -29,7 +29,7 @@
 
     [self initUserInterface];
     // Load the SKScene from 'GameScene.sks'
-    GameScene *testScene2 = [GameScene nodeWithFileNamed:@"GameScene"];
+//    GameScene *testScene2 = [GameScene nodeWithFileNamed:@"GameScene"];
     _testScene = [[GameScene alloc] initWithSize:CGSizeMake(kSCREEN_WIDTH, kSCREEN_HEIGHT)];
     _testScene.backgroundColor = [UIColor orangeColor];
     // Set the scale mode to scale to fit the window
@@ -41,12 +41,23 @@
     [view presentScene:_testScene];
 
 
+//    GameScene *testScene2 = [[GameScene alloc] initWithSize:CGSizeMake(kSCREEN_WIDTH, kSCREEN_HEIGHT)];
+//    testScene2.backgroundColor = [UIColor grayColor];
+//    testScene2.position = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT / 2);
+////    testScene2.scaleMode = skscene
+//    [view presentScene:testScene2];
+
+
 //    [view presentScene:_testScene];
 
-    [view presentScene:testScene2 transition:[SKTransition flipHorizontalWithDuration:1]];
+//    [view presentScene:testScene2 transition:[SKTransition flipHorizontalWithDuration:1]];
+
+
 
     view.showsFPS = YES;
     view.showsNodeCount = YES;
+
+    
 }
 
 

@@ -15,6 +15,9 @@
 		B5B28DEE1FD645B5008A9BCD /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = B5B28DEC1FD645B5008A9BCD /* GameScene.sks */; };
 		B5B28DF21FD645FC008A9BCD /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B28DF11FD645FC008A9BCD /* GameScene.m */; };
 		B5B28DF61FD64601008A9BCD /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B28DF51FD64601008A9BCD /* GameViewController.m */; };
+		B5B28E041FD788F7008A9BCD /* FFMineNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B28E031FD788F7008A9BCD /* FFMineNode.m */; };
+		B5B28E071FD795C4008A9BCD /* FFMapScene.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B28E061FD795C4008A9BCD /* FFMapScene.m */; };
+		B5B28E101FD7D02A008A9BCD /* FFGameModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B28E0F1FD7D02A008A9BCD /* FFGameModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +35,12 @@
 		B5B28DF41FD64601008A9BCD /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		B5B28DF51FD64601008A9BCD /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
 		B5B28DF81FD649BA008A9BCD /* FFPrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFPrefixHeader.pch; sourceTree = "<group>"; };
+		B5B28E021FD788F7008A9BCD /* FFMineNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFMineNode.h; sourceTree = "<group>"; };
+		B5B28E031FD788F7008A9BCD /* FFMineNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FFMineNode.m; sourceTree = "<group>"; };
+		B5B28E051FD795C4008A9BCD /* FFMapScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFMapScene.h; sourceTree = "<group>"; };
+		B5B28E061FD795C4008A9BCD /* FFMapScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FFMapScene.m; sourceTree = "<group>"; };
+		B5B28E0E1FD7D02A008A9BCD /* FFGameModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFGameModel.h; sourceTree = "<group>"; };
+		B5B28E0F1FD7D02A008A9BCD /* FFGameModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FFGameModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +77,7 @@
 				B5B28DCD1FD644EF008A9BCD /* AppDelegate.m */,
 				B5B28DE91FD645A1008A9BCD /* GameModel */,
 				B5B28DEF1FD645FC008A9BCD /* GameScene */,
+				B5B28E011FD788C6008A9BCD /* GameSprite */,
 				B5B28DF31FD64601008A9BCD /* GameController */,
 				B5B28DF71FD64997008A9BCD /* Other */,
 				B5B28DEA1FD645B5008A9BCD /* sks? */,
@@ -82,6 +92,8 @@
 		B5B28DE91FD645A1008A9BCD /* GameModel */ = {
 			isa = PBXGroup;
 			children = (
+				B5B28E0E1FD7D02A008A9BCD /* FFGameModel.h */,
+				B5B28E0F1FD7D02A008A9BCD /* FFGameModel.m */,
 			);
 			path = GameModel;
 			sourceTree = "<group>";
@@ -100,6 +112,8 @@
 			children = (
 				B5B28DF01FD645FC008A9BCD /* GameScene.h */,
 				B5B28DF11FD645FC008A9BCD /* GameScene.m */,
+				B5B28E051FD795C4008A9BCD /* FFMapScene.h */,
+				B5B28E061FD795C4008A9BCD /* FFMapScene.m */,
 			);
 			path = GameScene;
 			sourceTree = "<group>";
@@ -119,6 +133,15 @@
 				B5B28DF81FD649BA008A9BCD /* FFPrefixHeader.pch */,
 			);
 			path = Other;
+			sourceTree = "<group>";
+		};
+		B5B28E011FD788C6008A9BCD /* GameSprite */ = {
+			isa = PBXGroup;
+			children = (
+				B5B28E021FD788F7008A9BCD /* FFMineNode.h */,
+				B5B28E031FD788F7008A9BCD /* FFMineNode.m */,
+			);
+			path = GameSprite;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -194,9 +217,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5B28DF61FD64601008A9BCD /* GameViewController.m in Sources */,
+				B5B28E041FD788F7008A9BCD /* FFMineNode.m in Sources */,
 				B5B28DE31FD644EF008A9BCD /* main.m in Sources */,
+				B5B28E071FD795C4008A9BCD /* FFMapScene.m in Sources */,
 				B5B28DF21FD645FC008A9BCD /* GameScene.m in Sources */,
 				B5B28DCE1FD644EF008A9BCD /* AppDelegate.m in Sources */,
+				B5B28E101FD7D02A008A9BCD /* FFGameModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -22,7 +22,6 @@
     self.window.rootViewController = [GameViewController new];
     [self.window makeKeyAndVisible];
 
-
     return YES;
 }
 

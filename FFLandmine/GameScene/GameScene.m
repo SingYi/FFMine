@@ -8,6 +8,19 @@
 
 #import "GameScene.h"
 #import "FFMineNode.h"
+#import "FFMapScene.h"
+
+#define GridOfWidth kSCREEN_WIDTH / 9.0
+
+@interface GameScene ()
+
+@property (nonatomic, strong) SKSpriteNode *mapBackgroundNode;
+/**
+ 坐标原点
+ */
+@property (nonatomic,assign) CGPoint origin;
+
+@end
 
 @implementation GameScene {
     SKShapeNode *_spinnyNode;
@@ -16,23 +29,31 @@
     FFMineNode *backGround;
 }
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+
+    }
+    return self;
+}
+
 - (void)didMoveToView:(SKView *)view {
     // Setup your scene here
     
     // Get label node from scene and store it for use later
-    _label = (SKLabelNode *)[self childNodeWithName:@"There is no spoon"];
-    
-    _label.alpha = 0.0;
+    _label = (SKLabelNode *)[self childNodeWithName:@"title"];
+//
+    _label.alpha = 1;
     [_label runAction:[SKAction fadeInWithDuration:2.0]];
-    
+    NSLog(@"node label == %@",_label);
+//
     CGFloat w = (self.size.width + self.size.height) * 0.05;
-
-//    SKSpriteNode *test =
-
+//
     // Create shape node to use during mouse interaction
     _spinnyNode = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(w, w) cornerRadius:w * 0.3];
     _spinnyNode.lineWidth = 2.5;
-    
+
     [_spinnyNode runAction:[SKAction repeatActionForever:[SKAction rotateByAngle:M_PI duration:1]]];
     [_spinnyNode runAction:[SKAction sequence:@[
                                                 [SKAction waitForDuration:3],
@@ -40,21 +61,29 @@
                                                 [SKAction removeFromParent],
                                                 ]]];
 
-    backGround = [[FFMineNode alloc] initWithColor:[UIColor whiteColor] size:CGSizeMake(kSCREEN_WIDTH * 2, kSCREEN_WIDTH)];
-    backGround.position = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT / 2);
-    [self addChild:backGround];
+//    [_spinnyNode addtar]
+//
+//    backGround = [[FFMineNode alloc] initWithColor:[UIColor whiteColor] size:CGSizeMake(kSCREEN_WIDTH * 2, kSCREEN_WIDTH)];
+//    backGround.position = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT / 2);
+//    [self addChild:backGround];
+//
+//
+//    FFMineNode *node = [[FFMineNode alloc] init];
+////    node.position = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT / 2);
+//    node.position = CGPointZero;
+//    node.name = @"testPoint";
+//
+//    [backGround addChild:node];
 
-//    [testnode action]
+    [self initUserInterface];
 
-
-    FFMineNode *node = [[FFMineNode alloc] init];
-//    node.position = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT / 2);
-    node.position = CGPointZero;
-    node.name = @"testPoint";
-
-    [backGround addChild:node];
-//    [self addChild:node];
 }
+
+- (void)initUserInterface {
+    [self addChild:self.mapBackgroundNode];
+//    [self.mapBackgroundNode addChild:[FFMapScene creatMapSceneWithLevel:FFPrimaryLevel]];
+}
+
 
 
 - (void)touchDownAtPoint:(CGPoint)pos {
@@ -79,20 +108,24 @@
 }
 
 
-static NSTimeInterval startTime = 0;
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    // Run 'Pulse' action from 'Actions.sks'
-    [_label runAction:[SKAction actionNamed:@"Pulse"] withKey:@"fadeInOut"];
-    
-    for (UITouch *t in touches) {[self touchDownAtPoint:[t locationInNode:self]];}
 
-//    startTime = [touches anyObject].timestamp;
-    UITouch *touch = [touches anyObject];
-    CGPoint location = [touch locationInNode:self];
-    lastPoint = location;
-
-    NSLog(@"touch began");
-}
+//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+//    // Run 'Pulse' action from 'Actions.sks'
+//    [_label runAction:[SKAction actionNamed:@"Pulse"] withKey:@"fadeInOut"];
+//        NSLog(@"width == %lf",self.size.width);
+//    NSLog(@"scrren width == %lf",kSCREEN_WIDTH);
+//
+//
+//    for (UITouch *t in touches) {[self touchDownAtPoint:[t locationInNode:self]];}
+//
+////    startTime = [touches anyObject].timestamp;
+//    UITouch *touch = [touches anyObject];
+//    CGPoint location = [touch locationInNode:self];
+//    lastPoint = location;
+//
+//    NSLog(@"location.x ===== %lf",location.x);
+////    NSLog(@"touch began");
+//}
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
     for (UITouch *t in touches) {
@@ -106,13 +139,13 @@ static NSTimeInterval startTime = 0;
     lastPoint = location;
 
     FFMineNode *node = (FFMineNode *)[self childNodeWithName:@"testPoint"];
-    NSLog(@"node == %@",node);
+//    NSLog(@"node == %@",node);
     CGPoint originPoint = backGround.position;
     CGPoint afterPoint = CGPointMake(originPoint.x + addPoint.x, originPoint.y);
     backGround.position = afterPoint;
 
 
-    NSLog(@"point: x === %lf    y === %lf",location.x,location.y);
+//    NSLog(@"point: x === %lf    y === %lf",location.x,location.y);
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -122,8 +155,14 @@ static NSTimeInterval startTime = 0;
     UITouch *touch = [touches anyObject];
 
 
+    if (touch.tapCount == 2) {
+        NSLog(@"2");
+    } else {
+        NSLog(@"tap Count ==== %lu",(unsigned long)touch.tapCount);
+    }
 
-    CGFloat time = touch.timestamp - startTime;
+    NSLog(@"toucuo  time  == %f",touch.timestamp);
+
     CGPoint location = [touch locationInNode:self];
     lastPoint = location;
 //    CGPoint nodePosition = [self recentNode:location];
@@ -148,7 +187,7 @@ static NSTimeInterval startTime = 0;
 //    }else {
 //        self.userInteractionEnabled = YES;
 //    }
-    NSLog(@"touch end");
+//    NSLog(@"touch end");
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -179,4 +218,35 @@ static NSTimeInterval startTime = 0;
     // Called before each frame is rendered
 }
 
+
+
+
+
+#pragma mark - geter
+- (SKSpriteNode *)mapBackgroundNode {
+    if (!_mapBackgroundNode) {
+        _mapBackgroundNode = [[SKSpriteNode alloc] initWithColor:[UIColor whiteColor] size:CGSizeMake(750, 750)];
+        _mapBackgroundNode.position = CGPointMake(0, 0);
+        _mapBackgroundNode.name = @"mapBackgroundNode";
+
+        FFMineNode *node = [[FFMineNode alloc] init];
+        node.position = CGPointMake(-300, -300);
+        [_mapBackgroundNode addChild:node];
+    }
+    return _mapBackgroundNode;
+}
+
+
+
+
+
+
+
+
 @end
+
+
+
+
+
+

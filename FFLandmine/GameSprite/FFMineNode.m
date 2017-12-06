@@ -11,8 +11,9 @@
 @implementation FFMineNode
 
 
-- (instancetype)init {
-    self = [super initWithColor:[UIColor grayColor] size:CGSizeMake(kSCREEN_WIDTH / 9, kSCREEN_WIDTH / 9)];
+- (instancetype)init
+{
+    self = [super initWithColor:[UIColor grayColor] size:CGSizeMake(kSCREEN_WIDTH / 4, kSCREEN_WIDTH / 4)];
     if (self) {
         [self initUserInterface];
     }
@@ -20,10 +21,19 @@
 }
 
 
-- (void)initUserInterface {
 
+
+- (void)initUserInterface {
+    self.userInteractionEnabled = YES;
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    NSLog(@"1111111111111111111");
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    NSLog(@"???????????????");
+}
 
 
 

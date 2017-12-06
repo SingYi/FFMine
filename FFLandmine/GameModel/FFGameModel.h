@@ -6,7 +6,7 @@
 //  Copyright © 2017年 Yi Shi. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 typedef enum : NSUInteger {
     FFPrimaryLevel = 0,
@@ -19,6 +19,32 @@ typedef enum : NSUInteger {
 
 @interface FFGameModel : NSObject
 
+/** game level */
+@property (nonatomic, assign) FFGameLevel level;
+/** game cell width */
+@property (nonatomic, assign) CGFloat cellWidth;
+/** number of mines */
+@property (nonatomic, assign) int numberOfMines;
+/** mines array */
+@property (nonatomic, strong) NSArray *minesArray;
+
+
+/** single model*/
++ (FFGameModel *)sharedModel;
+
+
+
+
+
+
 
 
 @end
+
+
+
+
+
+
+
+

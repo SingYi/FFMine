@@ -20,49 +20,27 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    _testScene.size = CGSizeMake(kSCREEN_WIDTH, kSCREEN_HEIGHT);
+    if (_testScene.size.width > _testScene.size.height) {
+        _testScene.size = CGSizeMake(_testScene.size.height, _testScene.size.width);
+    } else {
+        _testScene.size = CGSizeMake(_testScene.size.width, _testScene.size.height);
+    }
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     [self initUserInterface];
-    // Load the SKScene from 'GameScene.sks'
-//    GameScene *testScene2 = [GameScene nodeWithFileNamed:@"GameScene"];
-    _testScene = [[GameScene alloc] initWithSize:CGSizeMake(kSCREEN_WIDTH, kSCREEN_HEIGHT)];
-    _testScene.backgroundColor = [UIColor orangeColor];
-    // Set the scale mode to scale to fit the window
-    _testScene.scaleMode = SKSceneScaleModeAspectFill;
-
-    SKView *view  = [[SKView alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT)];
-    self.view = view;
-    // Present the scene
-    [view presentScene:_testScene];
-
-
-//    GameScene *testScene2 = [[GameScene alloc] initWithSize:CGSizeMake(kSCREEN_WIDTH, kSCREEN_HEIGHT)];
-//    testScene2.backgroundColor = [UIColor grayColor];
-//    testScene2.position = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT / 2);
-////    testScene2.scaleMode = skscene
-//    [view presentScene:testScene2];
-
-
-//    [view presentScene:_testScene];
-
-//    [view presentScene:testScene2 transition:[SKTransition flipHorizontalWithDuration:1]];
-
-
-
-    view.showsFPS = YES;
-    view.showsNodeCount = YES;
-
-    
 }
 
 
 - (void)initUserInterface {
     self.navigationItem.title = @"选择游戏难度";
+    SKView *view  = [[SKView alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT)];
+    self.view = view;
+    [view presentScene:self.testScene];
+    view.showsFPS = YES;
+    view.showsNodeCount = YES;
 }
 
 
@@ -86,5 +64,20 @@
 - (BOOL)prefersStatusBarHidden {
     return YES;
 }
+
+#pragma mark - getter
+- (GameScene *)testScene {
+    if (!_testScene) {
+        _testScene = [GameScene nodeWithFileNamed:@"GameScene"];
+//        _testScene = [[GameScene alloc] initWithSize:CGSizeMake(kSCREEN_WIDTH, kSCREEN_HEIGHT)];
+//        _testScene.size = CGSizeMake(kSCREEN_WIDTH, kSCREEN_HEIGHT);
+        _testScene.scaleMode = SKSceneScaleModeAspectFill;
+    }
+    return _testScene;
+}
+
+
+
+
 
 @end

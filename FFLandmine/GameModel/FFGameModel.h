@@ -21,12 +21,25 @@ typedef enum : NSUInteger {
 
 /** game level */
 @property (nonatomic, assign) FFGameLevel level;
-/** game cell width */
-@property (nonatomic, assign) CGFloat cellWidth;
 /** number of mines */
 @property (nonatomic, assign) int numberOfMines;
 /** mines array */
 @property (nonatomic, strong) NSArray *minesArray;
+
+/** game map width */
+@property (nonatomic, assign) CGFloat mapWidth;
+/** game map height */
+@property (nonatomic, assign) CGFloat mapHeight;
+/** game row */
+@property (nonatomic, assign) NSInteger rowNumber;
+/** game col */
+@property (nonatomic, assign) NSInteger colNumber;
+/** game cell width */
+@property (nonatomic, assign) CGFloat cellWidth;
+/** game scene width */
+@property (nonatomic, assign) CGFloat sceneWidth;
+/** can scroll */
+@property (nonatomic, assign) BOOL canScrollMap;
 
 
 /** single model*/

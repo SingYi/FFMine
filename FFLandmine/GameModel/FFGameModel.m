@@ -28,25 +28,47 @@ static FFGameModel *model = nil;
     return model;
 }
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        [self initDataSource];
+
+
+
+#pragma mark - setter
+- (void)setLevel:(FFGameLevel)level {
+    _level = level;
+    switch (_level) {
+        case FFPrimaryLevel: {
+            _rowNumber = 9;
+            _colNumber = 9;
+            self.mapWidth = _rowNumber * _cellWidth;
+            self.mapHeight = _colNumber * _cellWidth;
+        }
+            break;
+        case FFMiddleLevel: {
+
+        }
+            break;
+        case FFHeightLevel: {
+
+        }
+            break;
+        default:
+
+            break;
     }
-    return self;
 }
 
-- (void)initDataSource {
-    _level = FFPrimaryLevel;
-    _cellWidth = kSCREEN_WIDTH / 9;
-    _numberOfMines = 10;
+- (void)setSceneWidth:(CGFloat)sceneWidth {
+    _sceneWidth = sceneWidth;
+    self.cellWidth = sceneWidth / 9;
 }
 
-
-
-
-
-
+#pragma mark - getter
+- (BOOL)canScrollMap {
+    if (_mapWidth > _sceneWidth || _mapHeight > _sceneWidth) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
 
 
 

@@ -12,7 +12,11 @@
 @interface FFMapScene : SKScene
 
 
+
 + (FFMapScene *)creatMapSceneWithLevel:(FFGameLevel)level;
+
+
+
 
 
 @end

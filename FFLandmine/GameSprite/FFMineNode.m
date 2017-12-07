@@ -20,19 +20,28 @@
     return self;
 }
 
+- (instancetype)initWithColor:(UIColor *)color size:(CGSize)size
+{
+    self = [super initWithColor:color size:size];
+    if (self) {
+        [self initUserInterface];
+    }
+    return self;
+}
+
 
 
 
 - (void)initUserInterface {
-    self.userInteractionEnabled = YES;
+//    self.userInteractionEnabled = YES;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    NSLog(@"1111111111111111111");
+    NSLog(@"%@",self.name);
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    NSLog(@"???????????????");
+
 }
 
 

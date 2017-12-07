@@ -10,4 +10,8 @@
 
 @interface GameScene : SKScene
 
+
+- (void)startGamesWith:(FFGameLevel)level;
+
+
 @end

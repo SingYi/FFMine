@@ -282,16 +282,18 @@
 
 
 
-    SKSpriteNode *testNode = [[SKSpriteNode alloc] initWithColor:[UIColor blackColor] size:CGSizeMake(0, 0)];
-    testNode.position = CGPointZero;
+    SKSpriteNode *testNode = [[SKSpriteNode alloc] initWithColor:[UIColor whiteColor] size:CGSizeMake(kSCREEN_WIDTH, kSCREEN_HEIGHT)];
+    testNode.position = CGPointMake(kSCREEN_WIDTH, kSCREEN_HEIGHT);
+    testNode.anchorPoint = CGPointMake(0.5, 0.5);
+    [self addChild:testNode];
 
-    [cropNode addChild:testNode];
+//    [cropNode addChild:testNode];
 
     self.mapBackgroundNode.size = CGSizeMake(MODEL.mapWidth, MODEL.mapHeight);
     self.mapBackgroundNode.anchorPoint = CGPointMake(0, 0);
     self.mapBackgroundNode.position = CGPointZero;
 
-    [testNode addChild:self.mapBackgroundNode];
+//    [testNode addChild:self.mapBackgroundNode];
 
     for (int i = 0; i < 81; i++) {
         FFMineNode *node = [[FFMineNode alloc] initWithColor:[UIColor grayColor] size:CGSizeMake(cellWidth - 1, cellWidth - 1)];
@@ -302,8 +304,10 @@
 
     }
 
+//    [self addChild:self.mapBackgroundNode];
 
-    [self addChild:cropNode];
+
+//    [self addChild:cropNode];
 
 
 
@@ -320,6 +324,7 @@
     }
     return _mapBackgroundNode;
 }
+
 
 - (FFMapScene *)mapScene {
     if (!_mapScene) {

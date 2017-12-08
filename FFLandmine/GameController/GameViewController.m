@@ -69,9 +69,10 @@
 #pragma mark - getter
 - (GameScene *)testScene {
     if (!_testScene) {
-        _testScene = [GameScene nodeWithFileNamed:@"GameScene"];
-        _testScene.scaleMode = SKSceneScaleModeAspectFill;
-//        _testScene.anchorPoint = CGPointZero;
+//        _testScene = [GameScene nodeWithFileNamed:@"GameScene"];
+        _testScene = [[GameScene alloc] initWithSize:CGSizeMake(kSCREEN_WIDTH * 2, kSCREEN_HEIGHT * 2)];
+        _testScene.scaleMode = SKSceneScaleModeFill;
+        _testScene.anchorPoint = CGPointZero;
     }
     return _testScene;
 }

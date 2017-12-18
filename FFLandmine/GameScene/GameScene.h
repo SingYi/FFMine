@@ -7,9 +7,20 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
+@class GameScene;
+
+
+@protocol GameSceneDelegate <NSObject>
+
+- (void)GameScene:(GameScene *)scene didBackButton:(id)info;
+
+
+@end
 
 @interface GameScene : SKScene
 
+
+@property (nonatomic, weak) id<GameSceneDelegate> gameDelegate;
 
 - (void)startGamesWith:(FFGameLevel)level;
 

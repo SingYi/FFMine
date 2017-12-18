@@ -17,11 +17,9 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
     self.window = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT)];
     self.window.rootViewController = [GameViewController new];
     [self.window makeKeyAndVisible];
-
     return YES;
 }
 

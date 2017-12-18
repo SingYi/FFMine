@@ -33,7 +33,7 @@
 
 
 - (void)initUserInterface {
-//    self.userInteractionEnabled = YES;
+    self.anchorPoint = CGPointZero;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {

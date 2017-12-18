@@ -11,6 +11,7 @@
 @interface FFGameModel ()
 
 
+
 @end
 
 static FFGameModel *model = nil;
@@ -40,14 +41,23 @@ static FFGameModel *model = nil;
             _colNumber = 9;
             self.mapWidth = _rowNumber * _cellWidth;
             self.mapHeight = _colNumber * _cellWidth;
+            self.numberOfMines = 9;
         }
             break;
         case FFMiddleLevel: {
-
+            _rowNumber = 16;
+            _colNumber = 16;
+            self.mapWidth = _rowNumber * _cellWidth;
+            self.mapHeight = _colNumber * _cellWidth;
+            self.numberOfMines = 40;
         }
             break;
         case FFHeightLevel: {
-
+            _rowNumber = 30;
+            _colNumber = 16;
+            self.mapWidth = _rowNumber * _cellWidth;
+            self.mapHeight = _colNumber * _cellWidth;
+            self.numberOfMines = 99;
         }
             break;
         default:
@@ -59,6 +69,7 @@ static FFGameModel *model = nil;
 - (void)setSceneWidth:(CGFloat)sceneWidth {
     _sceneWidth = sceneWidth;
     self.cellWidth = sceneWidth / 9;
+
 }
 
 #pragma mark - getter
@@ -68,6 +79,13 @@ static FFGameModel *model = nil;
     } else {
         return NO;
     }
+}
+
+- (NSMutableArray *)nodeArray {
+    if (!_nodeArray) {
+        _nodeArray = [NSMutableArray arrayWithCapacity:self.numberOfMines];
+    }
+    return _nodeArray;
 }
 
 

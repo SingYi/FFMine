@@ -17,13 +17,12 @@
 @interface GameScene ()
 
 
-@property (nonatomic, strong) SKSpriteNode *mapBackgroundNode;
+@property (nonatomic, strong) FFMapScene *mapBackgroundNode;
 /**
  坐标原点
  */
 @property (nonatomic,assign) CGPoint origin;
 
-@property (nonatomic, strong) FFMapScene *mapScene;
 
 @end
 
@@ -76,8 +75,7 @@
 }
 
 - (void)initUserInterface {
-    [self addChild:self.mapBackgroundNode];
-//    [self.mapBackgroundNode addChild:[FFMapScene creatMapSceneWithLevel:FFPrimaryLevel]];
+
 }
 
 
@@ -106,52 +104,26 @@
 
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-//     Run 'Pulse' action from 'Actions.sks'
-//    [_label runAction:[SKAction actionNamed:@"Pulse"] withKey:@"fadeInOut"];
-//        NSLog(@"width == %lf",self.size.width);
-//    NSLog(@"scrren width == %lf",kSCREEN_WIDTH);
-//
-//
-//    for (UITouch *t in touches) {[self touchDownAtPoint:[t locationInNode:self]];}
-//
-////    startTime = [touches anyObject].timestamp;
     UITouch *touch = [touches anyObject];
     CGPoint location = [touch locationInNode:self];
-//    lastPoint = location;
-
     SKNode *node =  [self nodeAtPoint:location];
-    NSLog(@"node == =%@",node);
-//
-//    NSLog(@"location.x ===== %lf",location.x);
-//    NSLog(@"touch began");
+
+    NSLog(@"node name === %@",node.name);
+
+
+    if ([node.name isEqualToString:@"GameBack"]) {
+        if (self.gameDelegate && [self.gameDelegate respondsToSelector:@selector(GameScene:didBackButton:)]) {
+            [self.gameDelegate GameScene:self didBackButton:nil];
+        }
+        NSLog(@"111111111111111111111111");
+    }
+
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
-//    for (UITouch *t in touches) {
-//        [self touchMovedToPoint:[t locationInNode:self]];
-//    }
-
-    //scroll map background
     if (MODEL.canScrollMap) {
     }
     [self scrollMapbackground:touches];
-
-
-//
-    UITouch *touch = [touches anyObject];
-    CGPoint location = [touch locationInNode:self];
-
-    CGPoint addPoint = CGPointMake(location.x - lastPoint.x, location.y - lastPoint.y);
-    lastPoint = location;
-//
-//    FFMineNode *node = (FFMineNode *)[self childNodeWithName:@"testPoint"];
-////    NSLog(@"node == %@",node);
-//    CGPoint originPoint = backGround.position;
-//    CGPoint afterPoint = CGPointMake(originPoint.x + addPoint.x, originPoint.y);
-//    backGround.position = afterPoint;
-//
-
-    NSLog(@"point: x === %lf    y === %lf",location.x,location.y);
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -221,17 +193,32 @@
 
     CGFloat deltaY = location.y - preveriousLocation.y;
     CGFloat deltaX = location.x - preveriousLocation.x;
+
     CGPoint originPoint = self.mapBackgroundNode.position;
 
-    NSLog(@"originPoint.x == %lf, originPoint.y = %lf",originPoint.x,originPoint.y);
+//    NSLog(@"originPoint.x == %lf, originPoint.y = %lf",originPoint.x,originPoint.y);
 
-//    if (originPoint.x - self.size.width / 2 ) {
-//        <#statements#>
-//    }
+    CGFloat afterX = 0.0;
+    CGFloat afterY = 0.0;
 
-    NSLog(@" xxx === %lf",originPoint.x - self.size.width / 2);
+    if (originPoint.x + deltaX >=0 ) {
+        afterX = 0;
+    } else if (originPoint.x + deltaX <= -MODEL.mapWidth + MODEL.sceneWidth) {
+        afterX = -MODEL.mapWidth + MODEL.sceneWidth;
+    } else {
+        afterX = originPoint.x + deltaX;
+    }
 
-    self.mapBackgroundNode.position = CGPointMake(self.mapBackgroundNode.position.x + deltaX,  self.mapBackgroundNode.position.y + deltaY);
+    if (originPoint.y + deltaY >= 0 ) {
+        afterY = 0;
+    } else if (originPoint.y + deltaY <= -MODEL.mapHeight + MODEL.sceneWidth) {
+        afterY = -MODEL.mapHeight + MODEL.sceneWidth;
+    } else {
+        afterY = originPoint.y + deltaY;
+    }
+
+    self.mapBackgroundNode.position = CGPointMake(afterX,  afterY);
+
 }
 
 
@@ -245,28 +232,14 @@
 
 #pragma mark - This code is mine
 - (void)startGamesWith:(FFGameLevel)level {
-    switch (level) {
-        case FFPrimaryLevel: {
-            [self startPrimaryLevelGame];
-        }
-            break;
-        case FFMiddleLevel: {
-
-        }
-            break;
-        case FFHeightLevel: {
-
-        }
-            break;
-        default:
-
-            break;
-    }
+//    [self removeAllChildren];
+    [self startPrimaryLevelGame];
 }
 
 - (void)startPrimaryLevelGame {
+    [self.mapBackgroundNode removeFromParent];
+
     CGFloat width = self.frame.size.width;
-    CGFloat cellWidth = width / 9;
     CGFloat height = self.frame.size.height;
 
     SKCropNode *cropNode = [[SKCropNode alloc] init];
@@ -274,41 +247,37 @@
     bgNode.anchorPoint = CGPointZero;
     bgNode.position = CGPointMake(0, 0);
     cropNode.maskNode = bgNode;
-    cropNode.position = CGPointMake(width / 2, height / 2);
+    cropNode.position = CGPointMake(0, (height - width) / 2);
 
+    SKSpriteNode *backNode = [[SKSpriteNode alloc] initWithColor:[UIColor whiteColor] size:CGSizeMake(width, width)];
+    backNode.anchorPoint = CGPointZero;
+    backNode.position = CGPointZero;
 
-    NSLog(@"%lf %lf",cropNode.position.x,cropNode.position.y);
-    NSLog(@"%lf %lf",bgNode.position.x,bgNode.position.y);
-
-
-
-    SKSpriteNode *testNode = [[SKSpriteNode alloc] initWithColor:[UIColor whiteColor] size:CGSizeMake(kSCREEN_WIDTH, kSCREEN_HEIGHT)];
-    testNode.position = CGPointMake(kSCREEN_WIDTH, kSCREEN_HEIGHT);
-    testNode.anchorPoint = CGPointMake(0.5, 0.5);
-    [self addChild:testNode];
-
-//    [cropNode addChild:testNode];
+    [cropNode addChild:backNode];
 
     self.mapBackgroundNode.size = CGSizeMake(MODEL.mapWidth, MODEL.mapHeight);
-    self.mapBackgroundNode.anchorPoint = CGPointMake(0, 0);
     self.mapBackgroundNode.position = CGPointZero;
 
-//    [testNode addChild:self.mapBackgroundNode];
+    NSLog(@"map width === %lf",MODEL.mapWidth);
 
-    for (int i = 0; i < 81; i++) {
-        FFMineNode *node = [[FFMineNode alloc] initWithColor:[UIColor grayColor] size:CGSizeMake(cellWidth - 1, cellWidth - 1)];
+    for (int i = 0; i < MODEL.colNumber * MODEL.rowNumber; i++) {
+        FFMineNode *node = [[FFMineNode alloc] initWithColor:[UIColor grayColor] size:CGSizeMake(MODEL.cellWidth - 1, MODEL.cellWidth - 1)];
+        node.name = [NSString stringWithFormat:Mind_name,i];
 
-        node.name = [NSString stringWithFormat:@"mineNode%d",i];
-        node.position = CGPointMake(  cellWidth / 2 + (cellWidth * (i % 9)), cellWidth / 2 + (cellWidth * (i / 9)));
+        node.position = CGPointMake((MODEL.cellWidth) * (i % MODEL.rowNumber),MODEL.mapHeight - MODEL.cellWidth * ((i / MODEL.rowNumber) + 1));
         [self.mapBackgroundNode addChild:node];
-
+        [MODEL.nodeArray addObject:node];
     }
 
-//    [self addChild:self.mapBackgroundNode];
+
+//    [cropNode addChild:self.mapBackgroundNode];
+    [cropNode addChild:self.mapBackgroundNode];
+    [self addChild:cropNode];
 
 
-//    [self addChild:cropNode];
-
+    SKNode *node = [self childNodeWithName:@"GameBack"];
+    [node removeFromParent];
+    [self addChild:node];
 
 
 }
@@ -317,22 +286,23 @@
 
 
 #pragma mark - geter
-- (SKSpriteNode *)mapBackgroundNode {
+- (FFMapScene *)mapBackgroundNode {
     if (!_mapBackgroundNode) {
-        _mapBackgroundNode = [[SKSpriteNode alloc] initWithColor:[UIColor whiteColor] size:CGSizeMake(0, 0)];
+        _mapBackgroundNode = [[FFMapScene alloc] initWithColor:[UIColor whiteColor] size:CGSizeMake(MODEL.sceneWidth, MODEL.sceneWidth)];
         _mapBackgroundNode.name = MAP_BACKGROUND_NAME;
+        _mapBackgroundNode.anchorPoint = CGPointZero;
     }
     return _mapBackgroundNode;
 }
 
 
-- (FFMapScene *)mapScene {
-    if (!_mapScene) {
-        _mapScene = [FFMapScene sceneWithSize:CGSizeMake(self.size.width, self.size.width)];
-        _mapScene.backgroundColor = [UIColor orangeColor];
-    }
-    return _mapScene;
-}
+
+
+
+
+
+
+
 
 
 

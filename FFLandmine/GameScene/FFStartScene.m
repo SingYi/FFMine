@@ -31,12 +31,14 @@
     UITouch *touch = [touches anyObject];
     CGPoint location = [touch locationInNode:self];
     SKLabelNode *node = (SKLabelNode *)[self nodeAtPoint:location];
-    if ([node.name isEqualToString:@"StartGame"]) {
-        NSLog(@"开始游戏");
-        if (self.startDelegate && [self.startDelegate respondsToSelector:@selector(FFStartScene:didClickStart:)]) {
-            [self.startDelegate FFStartScene:self didClickStart:FFPrimaryLevel];
-        }
+
+    NSString *index = [node.name substringFromIndex:node.name.length - 1];
+
+    NSLog(@"star index === %@",index);
+    if (self.startDelegate && [self.startDelegate respondsToSelector:@selector(FFStartScene:didClickStart:)]) {
+        [self.startDelegate FFStartScene:self didClickStart:(FFGameLevel)(index.integerValue)];
     }
+
 }
 
 

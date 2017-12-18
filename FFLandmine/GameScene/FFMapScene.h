@@ -9,11 +9,10 @@
 #import <SpriteKit/SpriteKit.h>
 #import "FFGameModel.h"
 
-@interface FFMapScene : SKScene
+@interface FFMapScene : SKSpriteNode
 
 
 
-+ (FFMapScene *)creatMapSceneWithLevel:(FFGameLevel)level;
 
 
 

@@ -12,18 +12,8 @@
 @implementation FFMapScene
 
 
-+ (FFMapScene *)creatMapSceneWithLevel:(FFGameLevel)level {
-    FFMapScene *scene = [[FFMapScene alloc] initWithSize:CGSizeMake(750, 750)];
-    scene.backgroundColor = [UIColor orangeColor];
-    scene.position = CGPointMake(0, 0);
-
-    return scene;
-}
-
-
-- (void)didMoveToView:(SKView *)view {
-
-
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    NSLog(@"??????????????");
 }
 
 

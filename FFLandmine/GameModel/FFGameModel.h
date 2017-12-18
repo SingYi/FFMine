@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define Mind_name @"mineNode%d"
+
 typedef enum : NSUInteger {
     FFPrimaryLevel = 0,
     FFMiddleLevel,
@@ -40,6 +42,9 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) CGFloat sceneWidth;
 /** can scroll */
 @property (nonatomic, assign) BOOL canScrollMap;
+
+/** mineArray */
+@property (nonatomic, strong) NSMutableArray *nodeArray;
 
 
 /** single model*/

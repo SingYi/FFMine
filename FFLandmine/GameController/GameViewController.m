@@ -10,9 +10,9 @@
 #import "GameScene.h"
 #import "FFStartScene.h"
 
-@interface GameViewController () <FFStartSceneDelegate>
+@interface GameViewController () <FFStartSceneDelegate, GameSceneDelegate>
 
-@property (nonatomic, strong) GameScene *testScene;
+@property (nonatomic, strong) GameScene *gameScene;
 
 @property (nonatomic, strong) FFStartScene *startScene;
 
@@ -58,23 +58,30 @@
 }
 
 
-#pragma mark - delegate
+#pragma mark - game start delegate
 - (void)FFStartScene:(FFStartScene *)scene didClickStart:(FFGameLevel)level {
-    [FFGameModel sharedModel].sceneWidth = self.testScene.size.width;
+    NSLog(@"level === %ld",level);
+    [FFGameModel sharedModel].sceneWidth = self.gameScene.size.width;
     [FFGameModel sharedModel].level = level;
-    [self.testScene startGamesWith:level];
-    [(SKView *)self.view presentScene:self.testScene transition:[SKTransition doorsOpenHorizontalWithDuration:0.3]];
+    [FFGameModel sharedModel].nodeArray = nil;
+    [self.gameScene startGamesWith:level];
+    [(SKView *)self.view presentScene:self.gameScene transition:[SKTransition doorsOpenHorizontalWithDuration:0.3]];
+}
+
+#pragma mark - game scene delegate
+- (void)GameScene:(GameScene *)scene didBackButton:(id)info {
+    [(SKView *)self.view presentScene:self.startScene transition:[SKTransition doorsCloseHorizontalWithDuration:0.3]];
 }
 
 #pragma mark - getter
-- (GameScene *)testScene {
-    if (!_testScene) {
-//        _testScene = [GameScene nodeWithFileNamed:@"GameScene"];
-        _testScene = [[GameScene alloc] initWithSize:CGSizeMake(kSCREEN_WIDTH * 2, kSCREEN_HEIGHT * 2)];
-        _testScene.scaleMode = SKSceneScaleModeFill;
-        _testScene.anchorPoint = CGPointZero;
+- (GameScene *)gameScene {
+    if (!_gameScene) {
+        _gameScene = [GameScene nodeWithFileNamed:@"GameScene"];
+        _gameScene.scaleMode = SKSceneScaleModeFill;
+        _gameScene.anchorPoint = CGPointZero;
+        _gameScene.gameDelegate = self;
     }
-    return _testScene;
+    return _gameScene;
 }
 
 - (FFStartScene *)startScene {

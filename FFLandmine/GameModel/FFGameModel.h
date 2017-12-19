@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <SpriteKit/SpriteKit.h>
 
 #define Mind_name @"mineNode%d"
 
@@ -26,7 +27,7 @@ typedef enum : NSUInteger {
 /** number of mines */
 @property (nonatomic, assign) int numberOfMines;
 /** mines array */
-@property (nonatomic, strong) NSArray *minesArray;
+@property (nonatomic, strong) NSMutableArray<NSNumber *> *minesArray;
 
 /** game map width */
 @property (nonatomic, assign) CGFloat mapWidth;
@@ -44,7 +45,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) BOOL canScrollMap;
 
 /** mineArray */
-@property (nonatomic, strong) NSMutableArray *nodeArray;
+@property (nonatomic, strong) NSMutableArray<SKSpriteNode *> *nodeArray;
 
 
 /** single model*/
@@ -52,6 +53,12 @@ typedef enum : NSUInteger {
 
 
 
+
+
+#pragma mark - logic operation
+- (NSArray *)selectTheItemAround8itemsWithIndex:(NSInteger)idx;
+
+- (BOOL)gameStartWithIndex:(NSUInteger)idx;
 
 
 

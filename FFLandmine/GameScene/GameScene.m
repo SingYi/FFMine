@@ -104,19 +104,6 @@
 
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    UITouch *touch = [touches anyObject];
-    CGPoint location = [touch locationInNode:self];
-    SKNode *node =  [self nodeAtPoint:location];
-
-    NSLog(@"node name === %@",node.name);
-
-
-    if ([node.name isEqualToString:@"GameBack"]) {
-        if (self.gameDelegate && [self.gameDelegate respondsToSelector:@selector(GameScene:didBackButton:)]) {
-            [self.gameDelegate GameScene:self didBackButton:nil];
-        }
-        NSLog(@"111111111111111111111111");
-    }
 
 }
 
@@ -127,61 +114,53 @@
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-//    for (UITouch *t in touches) {[self touchUpAtPoint:[t locationInNode:self]];}
-//
-//    // 获得点击的点
-//    UITouch *touch = [touches anyObject];
-//
-//
-//    if (touch.tapCount == 2) {
-//        NSLog(@"2");
-//    } else {
-//        NSLog(@"tap Count ==== %lu",(unsigned long)touch.tapCount);
-//    }
-//
-//    NSLog(@"toucuo  time  == %f",touch.timestamp);
-//
-//    CGPoint location = [touch locationInNode:self];
-//    lastPoint = location;
-//    CGPoint nodePosition = [self recentNode:location];
-//    NSLog(@"point: x === %lf    y === %lf",location.x,location.y);
+    UITouch *touch = [touches anyObject];
+    CGPoint location = [touch locationInNode:self];
 
-//    SKNode *node = [self nodeAtPoint:nodePosition];
-//    if ([node.name isEqual:@"GridNode"]) {
-//        SKSpriteNode *newNode = (SKSpriteNode *)node;
-//        if (time > 0.3) {
-//            newNode.name = @"sureMine";
-//            newNode.texture = [SKTexture textureWithImageNamed:@"红旗"];
-//        }else {
-//            self.userInteractionEnabled = NO;
-////            [self dealWithGridNode:node];
-//        }
-//    }else if ([node.name isEqualToString:@"sureMine"]) {
-//        SKSpriteNode *newNode = (SKSpriteNode *)node;
-//        if (time > 0.3) {
-//            newNode.name = @"GridNode";
-//            newNode.texture = [SKTexture textureWithImageNamed:@"方块"];
-//        }
-//    }else {
-//        self.userInteractionEnabled = YES;
-//    }
-//    NSLog(@"touch end");
+    NSLog(@"count === %@",@(touch.tapCount));//短时间内的点击次数
+    if (touch.tapCount == 1) {
+        syLog(@"1");
+    } else {
+        syLog(@"2");
+    }
+
+    CGFloat view_height = self.size.height;
+    CGFloat view_width = self.size.width;
+
+    SKNode *node =  [self nodeAtPoint:location];
+    if ((location.y < (view_height + view_width) / 2) && (location.y > (view_height - view_width) / 2)) {
+        syLog(@"node name === %@",node.name);
+
+        NSString *idx = [node.name substringFromIndex:8];
+        syLog(@"idx === %@",idx);
+
+//        NSArray *array = [MODEL selectTheItemAround8itemsWithIndex:idx.integerValue];
+
+        [MODEL gameStartWithIndex:idx.integerValue];
+        for (int i = 0; i < MODEL.minesArray.count; i++) {
+            SKSpriteNode *node = MODEL.nodeArray[i];
+            NSString *mineNumStr = [NSString stringWithFormat:@"%@", MODEL.minesArray[i]];
+            node.texture = [SKTexture textureWithImageNamed:mineNumStr];
+        }
+
+        syLog(@"array === %@",MODEL.minesArray);
+    }
+
+
+
+
+
+    if ([node.name isEqualToString:@"GameBack"]) {
+        if (self.gameDelegate && [self.gameDelegate respondsToSelector:@selector(GameScene:didBackButton:)]) {
+            [self.gameDelegate GameScene:self didBackButton:nil];
+        }
+        NSLog(@"111111111111111111111111");
+    }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
 //    for (UITouch *t in touches) {[self touchUpAtPoint:[t locationInNode:self]];}
 }
-
-
-// 判断点击的地方是否在节点上
-//- (CGPoint)recentNode:(CGPoint)location {
-//    CGFloat GridW = kSCREEN_WIDTH / 9.0;
-//    NSInteger countX = (location.x - self.origin.x) / GridW;
-//    NSInteger countY = (location.y - self.origin.y) / GridW;
-//    CGFloat x = self.origin.x + countX * GridW + GridW / 2.0;
-//    CGFloat y = self.origin.y + countY * GridW + GridW / 2.0;
-//    return CGPointMake(x, y);
-//}
 
 
 
@@ -237,6 +216,7 @@
 }
 
 - (void)startPrimaryLevelGame {
+    [self.mapBackgroundNode removeAllChildren];
     [self.mapBackgroundNode removeFromParent];
 
     CGFloat width = self.frame.size.width;
@@ -261,16 +241,12 @@
     NSLog(@"map width === %lf",MODEL.mapWidth);
 
     for (int i = 0; i < MODEL.colNumber * MODEL.rowNumber; i++) {
-        FFMineNode *node = [[FFMineNode alloc] initWithColor:[UIColor grayColor] size:CGSizeMake(MODEL.cellWidth - 1, MODEL.cellWidth - 1)];
-        node.name = [NSString stringWithFormat:Mind_name,i];
-
+        SKSpriteNode *node = MODEL.nodeArray[i];
         node.position = CGPointMake((MODEL.cellWidth) * (i % MODEL.rowNumber),MODEL.mapHeight - MODEL.cellWidth * ((i / MODEL.rowNumber) + 1));
         [self.mapBackgroundNode addChild:node];
-        [MODEL.nodeArray addObject:node];
     }
 
 
-//    [cropNode addChild:self.mapBackgroundNode];
     [cropNode addChild:self.mapBackgroundNode];
     [self addChild:cropNode];
 

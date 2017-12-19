@@ -169,10 +169,10 @@ static FFGameModel *model = nil;
                             NSNumber *value = _minesArray[index.integerValue];
                             [_minesArray replaceObjectAtIndex:index.integerValue withObject:[self addOne:value]];
                         } else {
-                            syLog(@"row == %ld, col == %ld",_rowNumber,_colNumber);
-                            syLog(@"idx == %ld",idx);
-                            syLog(@"modelarray[idx] == %@",_minesArray[idx]);
-                            syLog(@"%@",array);
+//                            syLog(@"row == %ld, col == %ld",_rowNumber,_colNumber);
+//                            syLog(@"idx == %ld",idx);
+//                            syLog(@"modelarray[idx] == %@",_minesArray[idx]);
+//                            syLog(@"%@",array);
                         }
                     }
 
@@ -224,12 +224,22 @@ static FFGameModel *model = nil;
 }
 
 - (void)doubleClickTheGridWithIndex:(NSInteger)idx {
-    NSNumber *showNumber = self.showArray[idx];
-    if (showNumber.integerValue == 0) {
-        return;
-    }
+    syLog(@"double click");
+//    NSNumber *showNumber = self.showArray[idx];
+//    if (showNumber.integerValue == 0) {
+//        return;
+//    }
 
-    [self clickNoMineCellWithIndex:idx];
+    NSArray *array = [self selectTheItemAround8itemsWithIndex:idx];
+    [array enumerateObjectsUsingBlock:^(NSNumber *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self.showArray replaceObjectAtIndex:obj.integerValue withObject:[NSNumber numberWithInt:1]];
+        if (self.minesArray[obj.integerValue].integerValue == 0) {
+            [self clickNoMineCellWithIndex:obj.integerValue];
+        }
+    }];
+
+    syLog(@"array === %@",array);
+
 
 }
 
@@ -272,7 +282,6 @@ static FFGameModel *model = nil;
     }];
 
     return set;
-
 }
 
 /** 判断是否计算完毕 */

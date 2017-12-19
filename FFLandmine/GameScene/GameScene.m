@@ -24,6 +24,12 @@
 @property (nonatomic,assign) CGPoint origin;
 
 
+
+@property (nonatomic, assign) BOOL isMove;
+@property (nonatomic, assign) BOOL isOneClick;
+@property (nonatomic, assign) BOOL isDoubuleClick;
+
+
 @end
 
 @implementation GameScene {
@@ -41,7 +47,7 @@
 ////
 //    _label.alpha = 1;
 //    [_label runAction:[SKAction fadeInWithDuration:2.0]];
-//    NSLog(@"node label == %@",_label);
+
 ////
 //    CGFloat w = (self.size.width + self.size.height) * 0.05;
 ////
@@ -105,11 +111,17 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 
+    _isMove = NO;
+    _isOneClick = NO;
+    _isDoubuleClick = NO;
+
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
     if (MODEL.canScrollMap) {
+
     }
+
     [self scrollMapbackground:touches];
 }
 
@@ -117,7 +129,10 @@
     UITouch *touch = [touches anyObject];
     CGPoint location = [touch locationInNode:self];
 
-    NSLog(@"count === %@",@(touch.tapCount));//短时间内的点击次数
+    if (_isMove) {
+        return;
+    }
+
     if (touch.tapCount == 1) {
         syLog(@"1");
     } else {
@@ -128,6 +143,7 @@
     CGFloat view_width = self.size.width;
 
     SKNode *node =  [self nodeAtPoint:location];
+
     if ((location.y < (view_height + view_width) / 2) && (location.y > (view_height - view_width) / 2)) {
         syLog(@"node name === %@",node.name);
 
@@ -136,17 +152,24 @@
 
 //        NSArray *array = [MODEL selectTheItemAround8itemsWithIndex:idx.integerValue];
 
-        [MODEL gameStartWithIndex:idx.integerValue];
-        for (int i = 0; i < MODEL.minesArray.count; i++) {
-            SKSpriteNode *node = MODEL.nodeArray[i];
-            NSString *mineNumStr = [NSString stringWithFormat:@"%@", MODEL.minesArray[i]];
-            node.texture = [SKTexture textureWithImageNamed:mineNumStr];
+        if (MODEL.isStar == NO) {
+            [MODEL gameStartWithIndex:idx.integerValue];
         }
 
-        syLog(@"array === %@",MODEL.minesArray);
+        [MODEL clickTheGridWithIndex:idx.integerValue];
+
+
+        for (int i = 0; i < MODEL.showArray.count; i++) {
+            SKSpriteNode *node = MODEL.nodeArray[i];
+            if (MODEL.showArray[i].integerValue == 1) {
+                NSString *mineNumStr = [NSString stringWithFormat:@"%@", MODEL.minesArray[i]];
+                node.texture = [SKTexture textureWithImageNamed:mineNumStr];
+            } else {
+                node.texture = [SKTexture textureWithImageNamed:@"11"];
+            }
+        }
+
     }
-
-
 
 
 
@@ -154,12 +177,12 @@
         if (self.gameDelegate && [self.gameDelegate respondsToSelector:@selector(GameScene:didBackButton:)]) {
             [self.gameDelegate GameScene:self didBackButton:nil];
         }
-        NSLog(@"111111111111111111111111");
     }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-//    for (UITouch *t in touches) {[self touchUpAtPoint:[t locationInNode:self]];}
+
+
 }
 
 
@@ -175,10 +198,12 @@
 
     CGPoint originPoint = self.mapBackgroundNode.position;
 
-//    NSLog(@"originPoint.x == %lf, originPoint.y = %lf",originPoint.x,originPoint.y);
-
     CGFloat afterX = 0.0;
     CGFloat afterY = 0.0;
+
+    if (!_isMove && (sqrt(deltaX * deltaX + deltaY * deltaY) > 1)) {
+        _isMove = YES;
+    }
 
     if (originPoint.x + deltaX >=0 ) {
         afterX = 0;
@@ -238,11 +263,11 @@
     self.mapBackgroundNode.size = CGSizeMake(MODEL.mapWidth, MODEL.mapHeight);
     self.mapBackgroundNode.position = CGPointZero;
 
-    NSLog(@"map width === %lf",MODEL.mapWidth);
 
     for (int i = 0; i < MODEL.colNumber * MODEL.rowNumber; i++) {
         SKSpriteNode *node = MODEL.nodeArray[i];
         node.position = CGPointMake((MODEL.cellWidth) * (i % MODEL.rowNumber),MODEL.mapHeight - MODEL.cellWidth * ((i / MODEL.rowNumber) + 1));
+        node.texture = [SKTexture textureWithImageNamed:@"11"];
         [self.mapBackgroundNode addChild:node];
     }
 
@@ -254,11 +279,7 @@
     SKNode *node = [self childNodeWithName:@"GameBack"];
     [node removeFromParent];
     [self addChild:node];
-
-
 }
-
-
 
 
 #pragma mark - geter
@@ -267,6 +288,7 @@
         _mapBackgroundNode = [[FFMapScene alloc] initWithColor:[UIColor whiteColor] size:CGSizeMake(MODEL.sceneWidth, MODEL.sceneWidth)];
         _mapBackgroundNode.name = MAP_BACKGROUND_NAME;
         _mapBackgroundNode.anchorPoint = CGPointZero;
+        _mapBackgroundNode.texture = [SKTexture textureWithImageNamed:@"backGround"];
     }
     return _mapBackgroundNode;
 }

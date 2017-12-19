@@ -60,10 +60,10 @@
 
 #pragma mark - game start delegate
 - (void)FFStartScene:(FFStartScene *)scene didClickStart:(FFGameLevel)level {
-    NSLog(@"level === %ld",level);
     [FFGameModel sharedModel].sceneWidth = self.gameScene.size.width;
     [FFGameModel sharedModel].level = level;
     [FFGameModel sharedModel].nodeArray = nil;
+    [FFGameModel sharedModel].isStar = NO;
     [self.gameScene startGamesWith:level];
     [(SKView *)self.view presentScene:self.gameScene transition:[SKTransition doorsOpenHorizontalWithDuration:0.3]];
 }

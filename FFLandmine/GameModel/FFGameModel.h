@@ -26,8 +26,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) FFGameLevel level;
 /** number of mines */
 @property (nonatomic, assign) int numberOfMines;
-/** mines array */
-@property (nonatomic, strong) NSMutableArray<NSNumber *> *minesArray;
+
 
 /** game map width */
 @property (nonatomic, assign) CGFloat mapWidth;
@@ -44,9 +43,16 @@ typedef enum : NSUInteger {
 /** can scroll */
 @property (nonatomic, assign) BOOL canScrollMap;
 
-/** mineArray */
+/** node array */
 @property (nonatomic, strong) NSMutableArray<SKSpriteNode *> *nodeArray;
+/** maps array */
+@property (nonatomic, strong) NSMutableArray<NSNumber *> *minesArray;
+/** show array */
+@property (nonatomic, strong) NSMutableArray<NSNumber *> *showArray;
 
+
+
+@property (nonatomic, assign) BOOL isStar;
 
 /** single model*/
 + (FFGameModel *)sharedModel;
@@ -60,8 +66,18 @@ typedef enum : NSUInteger {
 
 - (BOOL)gameStartWithIndex:(NSUInteger)idx;
 
+#pragma mark - Flip the grid
+/** Clicked the grid */
+- (void)clickTheGridWithIndex:(NSInteger)idx;
 
+/** Clicked with a grid of numbers */
+- (void)clickNumberCellWithIndex:(NSInteger)idx;
 
+/** Clicked on the blank grid */
+- (NSSet *)clickNoMineCellWithIndex:(NSInteger)idx;
+
+/** Click the grid with the mine */
+- (void)clickTheGridWithTheMineWithIndex:(NSInteger)idx;
 
 
 @end

@@ -43,7 +43,7 @@ static FFGameModel *model = nil;
             _colNumber = 9;
             self.mapWidth = _rowNumber * _cellWidth;
             self.mapHeight = _colNumber * _cellWidth;
-            self.numberOfMines = 9;
+            self.numberOfMines = 10;
         }
             break;
         case FFMiddleLevel: {
@@ -74,42 +74,6 @@ static FFGameModel *model = nil;
 
 }
 
-#pragma mark - getter
-- (BOOL)canScrollMap {
-    if (_mapWidth > _sceneWidth || _mapHeight > _sceneWidth) {
-        return YES;
-    } else {
-        return NO;
-    }
-}
-
-- (NSMutableArray *)nodeArray {
-    if (!_nodeArray) {
-        _nodeArray = [NSMutableArray arrayWithCapacity:99];
-        for (int i = 0; i < 480; i++) {
-            SKSpriteNode *node = [[SKSpriteNode alloc] initWithColor:[UIColor grayColor] size:CGSizeMake(self.cellWidth - 1, self.cellWidth - 1)];
-
-            node.name = [NSString stringWithFormat:Mind_name,i];
-            node.anchorPoint = CGPointZero;
-            [_nodeArray addObject:node];
-        }
-    }
-    return _nodeArray;
-}
-
-- (NSMutableArray *)minesArray {
-    if (!_minesArray) {
-        if (_rowNumber > 8 && _colNumber > 8) {
-            _minesArray = [NSMutableArray arrayWithCapacity:_rowNumber * _colNumber];
-            for (NSInteger i = 0; i < _rowNumber * _colNumber; i++) {
-                [_minesArray setObject:[NSNumber numberWithInteger:0] atIndexedSubscript:i];
-            }
-        } else {
-            _minesArray = nil;
-        }
-    }
-    return _minesArray;
-}
 
 
 #pragma mark - logic operation
@@ -118,6 +82,7 @@ static FFGameModel *model = nil;
 
     //clear mine array
     self.minesArray = nil;
+    self.showArray = nil;
     if (self.minesArray == nil) {
         return NO;
     }
@@ -134,7 +99,7 @@ static FFGameModel *model = nil;
         return NO;
     }
 
-
+    _isStar = YES;
 
     return YES;
 }
@@ -152,7 +117,7 @@ static FFGameModel *model = nil;
     NSArray *array = [self selectTheItemAround8itemsWithIndex:idx];
 
     if (array.count == 0) {
-        NSLog(@"获取周围八个格子出错");
+        syLog(@"获取周围八个格子出错");
         return NO;
     }
 
@@ -230,19 +195,57 @@ static FFGameModel *model = nil;
 }
 
 #pragma mark - Flip the grid
+- (void)clickTheGridWithIndex:(NSInteger)idx {
+    NSNumber *showNumber = self.showArray[idx];
+    if (showNumber.integerValue == 1) {
+        return;
+    }
+
+    NSNumber *mineNumber = self.minesArray[idx];
+    if (mineNumber.integerValue == 0) {
+        [self clickNoMineCellWithIndex:idx];
+    } else if (mineNumber.integerValue == 10) {
+        [self clickTheGridWithTheMineWithIndex:idx];
+    } else {
+        [self clickNumberCellWithIndex:idx];
+    }
+
+}
+
+
+- (void)clickNumberCellWithIndex:(NSInteger)idx {
+    [self.showArray replaceObjectAtIndex:idx withObject:[NSNumber numberWithInt:1]];
+}
+
+- (void)clickTheGridWithTheMineWithIndex:(NSInteger)idx {
+    [self.showArray replaceObjectAtIndex:idx withObject:[NSNumber numberWithInt:1]];
+#warning game over
+    NSLog(@"game over结束");
+}
+
+
+
+
+
+
 /** 翻开下标为0的周围所有格子,如果周围存在还有为0的格子,继续翻开下标为0的格子 */
 - (NSSet *)clickNoMineCellWithIndex:(NSInteger)index {
+    //需要翻开的所有格子
     NSMutableSet<NSNumber *> *alreadySet = [NSMutableSet setWithObject:[NSNumber numberWithInteger:index]];
+    //添加周围8个为空的格子
     NSMutableSet<NSNumber *> *allSet = [self findEmptyIndex:index];
+
     //判断是否计算完毕
     allSet = [self alreadySet:alreadySet allSet:allSet WithMineArray:self.minesArray];
 
+    //添加这些格子的周围8个格子
     for (NSNumber *num in allSet) {
         [alreadySet unionSet:[self findAroundWihtIndex:num.integerValue]];
     }
 
+    //讲显示数组的下标设置为 1
     for (NSNumber *num in alreadySet) {
-//        self.showArray[num.integerValue] = [NSNumber numberWithInt:1];
+        self.showArray[num.integerValue] = [NSNumber numberWithInt:1];
     }
 
     return alreadySet;
@@ -251,7 +254,6 @@ static FFGameModel *model = nil;
 
 //计算周围8个方向是否有空
 - (NSMutableSet *)findEmptyIndex:(NSInteger)idx {
-
     NSMutableSet *set = [NSMutableSet set];
 
     if (self.minesArray[idx].integerValue == 0) {
@@ -272,6 +274,7 @@ static FFGameModel *model = nil;
 
 /** 判断是否计算完毕 */
 - (NSMutableSet *)alreadySet:(NSMutableSet *)alreadySet allSet:(NSMutableSet *)allSet WithMineArray:(NSMutableArray *)mineArray {
+
     NSMutableSet<NSNumber *> *beingSet = [NSMutableSet setWithSet:allSet];
     [beingSet minusSet:alreadySet];
 
@@ -287,6 +290,7 @@ static FFGameModel *model = nil;
     return allSet;
 }
 
+/** 添加周围8个格子 */
 - (NSMutableSet *)findAroundWihtIndex:(NSInteger)idx {
     NSMutableSet *set = [NSMutableSet set];
     NSArray *array = [self selectTheItemAround8itemsWithIndex:idx];
@@ -359,7 +363,52 @@ static FFGameModel *model = nil;
 
 
 
+#pragma mark - getter
+- (BOOL)canScrollMap {
+    if (_mapWidth > _sceneWidth || _mapHeight > _sceneWidth) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
 
+- (NSMutableArray *)nodeArray {
+    if (!_nodeArray) {
+        _nodeArray = [NSMutableArray arrayWithCapacity:99];
+        for (int i = 0; i < 480; i++) {
+            SKSpriteNode *node = [[SKSpriteNode alloc] initWithColor:[UIColor grayColor] size:CGSizeMake(self.cellWidth - 1, self.cellWidth - 1)];
+
+            node.name = [NSString stringWithFormat:Mind_name,i];
+            node.anchorPoint = CGPointZero;
+            [_nodeArray addObject:node];
+        }
+    }
+    return _nodeArray;
+}
+
+- (NSMutableArray *)minesArray {
+    if (!_minesArray) {
+        if (_rowNumber > 8 && _colNumber > 8) {
+            _minesArray = [NSMutableArray arrayWithCapacity:_rowNumber * _colNumber];
+            for (NSInteger i = 0; i < _rowNumber * _colNumber; i++) {
+                [_minesArray setObject:[NSNumber numberWithInteger:0] atIndexedSubscript:i];
+            }
+        } else {
+            _minesArray = nil;
+        }
+    }
+    return _minesArray;
+}
+
+- (NSMutableArray<NSNumber *> *)showArray {
+    if (!_showArray) {
+        _showArray = [NSMutableArray arrayWithCapacity:self.minesArray.count];
+        for (NSInteger i = 0; i < _rowNumber * _colNumber; i++) {
+            [_showArray setObject:[NSNumber numberWithInteger:0] atIndexedSubscript:i];
+        }
+    }
+    return _showArray;
+}
 
 
 

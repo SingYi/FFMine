@@ -34,7 +34,6 @@
 
     NSString *index = [node.name substringFromIndex:node.name.length - 1];
 
-    NSLog(@"star index === %@",index);
     if (self.startDelegate && [self.startDelegate respondsToSelector:@selector(FFStartScene:didClickStart:)]) {
         [self.startDelegate FFStartScene:self didClickStart:(FFGameLevel)(index.integerValue)];
     }

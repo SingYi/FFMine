@@ -40,81 +40,14 @@
 }
 
 - (void)didMoveToView:(SKView *)view {
-    // Setup your scene here
-    
-    // Get label node from scene and store it for use later
-//    _label = (SKLabelNode *)[self childNodeWithName:@"title"];
-////
-//    _label.alpha = 1;
-//    [_label runAction:[SKAction fadeInWithDuration:2.0]];
-
-////
-//    CGFloat w = (self.size.width + self.size.height) * 0.05;
-////
-//    // Create shape node to use during mouse interaction
-//    _spinnyNode = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(w, w) cornerRadius:w * 0.3];
-//    _spinnyNode.lineWidth = 2.5;
-//
-//    [_spinnyNode runAction:[SKAction repeatActionForever:[SKAction rotateByAngle:M_PI duration:1]]];
-//    [_spinnyNode runAction:[SKAction sequence:@[
-//                                                [SKAction waitForDuration:3],
-//                                                [SKAction fadeOutWithDuration:3],
-//                                                [SKAction removeFromParent],
-//                                                ]]];
-
-//    [_spinnyNode addtar]
-//
-//    backGround = [[FFMineNode alloc] initWithColor:[UIColor whiteColor] size:CGSizeMake(kSCREEN_WIDTH * 2, kSCREEN_WIDTH)];
-//    backGround.position = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT / 2);
-//    [self addChild:backGround];
-//
-//
-//    FFMineNode *node = [[FFMineNode alloc] init];
-////    node.position = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT / 2);
-//    node.position = CGPointZero;
-//    node.name = @"testPoint";
-//
-//    [backGround addChild:node];
-
-//    [self initUserInterface];
 
 }
-
-- (void)initUserInterface {
-
-}
-
-
-
-- (void)touchDownAtPoint:(CGPoint)pos {
-    SKShapeNode *n = [_spinnyNode copy];
-    n.position = pos;
-    n.strokeColor = [SKColor greenColor];
-    [self addChild:n];
-}
-
-- (void)touchMovedToPoint:(CGPoint)pos {
-    SKShapeNode *n = [_spinnyNode copy];
-    n.position = pos;
-    n.strokeColor = [SKColor blueColor];
-    [self addChild:n];
-}
-
-- (void)touchUpAtPoint:(CGPoint)pos {
-    SKShapeNode *n = [_spinnyNode copy];
-    n.position = pos;
-    n.strokeColor = [SKColor redColor];
-    [self addChild:n];
-}
-
 
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-
     _isMove = NO;
     _isOneClick = NO;
     _isDoubuleClick = NO;
-
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
@@ -133,44 +66,22 @@
         return;
     }
 
-    if (touch.tapCount == 1) {
-        syLog(@"1");
-    } else {
-        syLog(@"2");
-    }
-
     CGFloat view_height = self.size.height;
     CGFloat view_width = self.size.width;
 
     SKNode *node =  [self nodeAtPoint:location];
+    NSString *idx = [node.name substringFromIndex:8];
+
 
     if ((location.y < (view_height + view_width) / 2) && (location.y > (view_height - view_width) / 2)) {
-        syLog(@"node name === %@",node.name);
-
-        NSString *idx = [node.name substringFromIndex:8];
-        syLog(@"idx === %@",idx);
-
-//        NSArray *array = [MODEL selectTheItemAround8itemsWithIndex:idx.integerValue];
-
-        if (MODEL.isStar == NO) {
-            [MODEL gameStartWithIndex:idx.integerValue];
+        if (touch.tapCount == 1) {
+            [self clickGridWithIndex:idx.integerValue];
+        } else if(touch.tapCount == 2) {
+            [self doubleClickGridWIthIndex:idx.integerValue];
+            syLog(@"2");
         }
-
-        [MODEL clickTheGridWithIndex:idx.integerValue];
-
-
-        for (int i = 0; i < MODEL.showArray.count; i++) {
-            SKSpriteNode *node = MODEL.nodeArray[i];
-            if (MODEL.showArray[i].integerValue == 1) {
-                NSString *mineNumStr = [NSString stringWithFormat:@"%@", MODEL.minesArray[i]];
-                node.texture = [SKTexture textureWithImageNamed:mineNumStr];
-            } else {
-                node.texture = [SKTexture textureWithImageNamed:@"11"];
-            }
-        }
-
+        syLog(@"index === %@",idx);
     }
-
 
 
     if ([node.name isEqualToString:@"GameBack"]) {
@@ -226,7 +137,37 @@
 }
 
 
+- (void)clickGridWithIndex:(NSInteger)idx {
+    if (MODEL.isStar == NO) {
+        [MODEL gameStartWithIndex:idx];
+    }
 
+    [MODEL clickTheGridWithIndex:idx];
+
+
+    for (int i = 0; i < MODEL.showArray.count; i++) {
+        SKSpriteNode *node = MODEL.nodeArray[i];
+        if (MODEL.showArray[i].integerValue == 1) {
+            NSString *mineNumStr = [NSString stringWithFormat:@"%@", MODEL.minesArray[i]];
+            node.texture = [SKTexture textureWithImageNamed:mineNumStr];
+        } else {
+            node.texture = [SKTexture textureWithImageNamed:@"11"];
+        }
+    }
+}
+
+- (void)doubleClickGridWIthIndex:(NSInteger)idx {
+    [MODEL doubleClickTheGridWithIndex:idx];
+    for (int i = 0; i < MODEL.showArray.count; i++) {
+        SKSpriteNode *node = MODEL.nodeArray[i];
+        if (MODEL.showArray[i].integerValue == 1) {
+            NSString *mineNumStr = [NSString stringWithFormat:@"%@", MODEL.minesArray[i]];
+            node.texture = [SKTexture textureWithImageNamed:mineNumStr];
+        } else {
+            node.texture = [SKTexture textureWithImageNamed:@"11"];
+        }
+    }
+}
 
 
 

@@ -58,15 +58,9 @@ typedef enum : NSUInteger {
 + (FFGameModel *)sharedModel;
 
 
-
-
-
 #pragma mark - logic operation
-- (NSArray *)selectTheItemAround8itemsWithIndex:(NSInteger)idx;
-
 - (BOOL)gameStartWithIndex:(NSUInteger)idx;
 
-#pragma mark - Flip the grid
 /** Clicked the grid */
 - (void)clickTheGridWithIndex:(NSInteger)idx;
 
@@ -74,10 +68,14 @@ typedef enum : NSUInteger {
 - (void)clickNumberCellWithIndex:(NSInteger)idx;
 
 /** Clicked on the blank grid */
-- (NSSet *)clickNoMineCellWithIndex:(NSInteger)idx;
+- (void)clickNoMineCellWithIndex:(NSInteger)idx;
 
 /** Click the grid with the mine */
 - (void)clickTheGridWithTheMineWithIndex:(NSInteger)idx;
+
+/** Double click the grid with index */
+- (void)doubleClickTheGridWithIndex:(NSInteger)idx;
+
 
 
 @end

@@ -223,13 +223,18 @@ static FFGameModel *model = nil;
     NSLog(@"game over结束");
 }
 
+- (void)doubleClickTheGridWithIndex:(NSInteger)idx {
+    NSNumber *showNumber = self.showArray[idx];
+    if (showNumber.integerValue == 0) {
+        return;
+    }
 
+    [self clickNoMineCellWithIndex:idx];
 
-
-
+}
 
 /** 翻开下标为0的周围所有格子,如果周围存在还有为0的格子,继续翻开下标为0的格子 */
-- (NSSet *)clickNoMineCellWithIndex:(NSInteger)index {
+- (void)clickNoMineCellWithIndex:(NSInteger)index {
     //需要翻开的所有格子
     NSMutableSet<NSNumber *> *alreadySet = [NSMutableSet setWithObject:[NSNumber numberWithInteger:index]];
     //添加周围8个为空的格子
@@ -247,8 +252,6 @@ static FFGameModel *model = nil;
     for (NSNumber *num in alreadySet) {
         self.showArray[num.integerValue] = [NSNumber numberWithInt:1];
     }
-
-    return alreadySet;
 }
 
 
